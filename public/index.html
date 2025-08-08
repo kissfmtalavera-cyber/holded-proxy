@@ -636,7 +636,7 @@
         let holdedSyncInterval = null;
 
         // Using Node.js proxy instead of CORS proxies
-        const PROXY_BASE_URL = 'https://mi-proxy.com';
+        const PROXY_BASE_URL = 'https://holded-proxy.onrender.com';
 
         // Initialize Supabase client if credentials exist
         function initSupabase() {
@@ -1520,7 +1520,7 @@
                 if (error.name === 'AbortError') {
                     showHoldedStatus('error', '❌ Tiempo de espera agotado. Verifica que tu proxy esté funcionando.');
                 } else if (error.message.includes('Failed to fetch')) {
-                    showHoldedStatus('error', '❌ No se puede conectar al proxy. Verifica que https://mi-proxy.com esté accesible.');
+                    showHoldedStatus('error', '❌ No se puede conectar al proxy. Verifica que https://holded-proxy.onrender.com esté accesible.');
                 } else {
                     showHoldedStatus('error', `❌ Error de conexión: ${error.message}`);
                 }
@@ -2299,7 +2299,7 @@ Cross-Origin Resource Sharing - Política de seguridad del navegador
                     message += `   └─ Error: ${diagnostics.proxyError}\n`;
                 }
                 solutions.push('• Verifica que tu proxy Node.js esté funcionando');
-                solutions.push('• Comprueba que https://mi-proxy.com esté accesible');
+                solutions.push('• Comprueba que https://holded-proxy.onrender.com esté accesible');
                 solutions.push('• Revisa los logs del servidor proxy');
                 statusType = 'error';
             } else {
@@ -3896,7 +3896,7 @@ Esta acción NO se puede deshacer.`;
                             
                             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                                 <p class="text-sm text-blue-700">
-                                    <strong>✅ Configuración de Proxy:</strong> Este sistema está configurado para usar tu proxy Node.js en <code>https://mi-proxy.com</code> para evitar problemas de CORS.
+                                    <strong>✅ Configuración de Proxy:</strong> Este sistema está configurado para usar tu proxy Node.js en <code>https://holded-proxy.onrender.com</code> para evitar problemas de CORS.
                                 </p>
                             </div>
                             
@@ -3933,7 +3933,7 @@ Esta acción NO se puede deshacer.`;
                                     <div class="text-sm text-gray-700 space-y-1">
                                         <div>
                                             <strong>Proxy URL:</strong>
-                                            <span class="ml-2 text-gray-600 font-mono">https://mi-proxy.com</span>
+                                            <span class="ml-2 text-gray-600 font-mono">https://holded-proxy.onrender.com</span>
                                         </div>
                                         <div>
                                             <strong>Última sincronización:</strong>
@@ -7681,5 +7681,5 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;</pre>
             }, 100);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96bcff9434eacbf2',t:'MTc1NDYzNDk3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96bd4d3974aef76d',t:'MTc1NDYzODE1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
