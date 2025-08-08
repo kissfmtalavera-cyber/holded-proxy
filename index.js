@@ -1,38 +1,42 @@
 const express = require('express');
-const fetch = require('node-fetch');
-const cors = require('cors');
+const path = require('path');
+const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+app.use(express.json());
 
-// Tu clave de Holded
-const HOLDED_API_KEY = 'b023d565797ee81761ccc946735086ab';
+// Servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Permitir CORS desde tu frontend
-app.use(cors());
+// Ruta principal
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
-// Ruta para obtener facturas desde Holded
-app.get('/api/holded/invoices', async (req, res) => {
+// Ruta para obtener contactos desde Holded
+app.get('/api/contacts', async (req, res) => {
   try {
-    const response = await fetch('https://api.holded.com/api/invoicing/v1/documents?type=invoice', {
+    const response = await axios.get('https://api.holded.com/api/invoicing/v1/contacts', {
       headers: {
-        Authorization: `Bearer ${HOLDED_API_KEY}`
+        'accept': 'application/json',
+        'key': process.env.HOLDED_API_KEY
       }
     });
-
-    if (!response.ok) {
-      return res.status(response.status).json({ error: 'Error al conectar con Holded' });
-    }
-
-    const data = await response.json();
-    res.json(data);
+    res.json(response.data);
   } catch (error) {
-    console.error('❌ Error en el proxy:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error('Error al obtener contactos:', error.message);
+    res.status(500).json({ error: 'Error al obtener contactos desde Holded' });
   }
 });
 
-// Iniciar el servidor
+// Manejo de rutas no encontradas
+app.use((req, res) => {
+  res.status(404).send('Ruta no encontrada');
+});
+
+// Puerto
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor proxy activo en http://localhost:${PORT}`);
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
