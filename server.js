@@ -1,47 +1,42 @@
 const express = require('express');
-const fetch = require('node-fetch').default;
-const cors = require('cors');
+const path = require('path');
+const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
-
-app.use(cors());
 app.use(express.json());
 
-// Ruta dinámica para acceder a cualquier endpoint de Holded
-app.get('/api/holded/:module/:version/:resource', async (req, res) => {
-    const { module, version, resource } = req.params;
-    const apiKey = req.headers.authorization?.replace('Bearer ', '');
+// Servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
 
-    if (!apiKey) {
-        return res.status(400).json({ error: 'API key missing' });
-    }
-
-    const holdedUrl = `https://api.holded.com/api/${module}/${version}/${resource}`;
-
-    try {
-        const response = await fetch(holdedUrl, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            return res.status(response.status).json({ error: data });
-        }
-
-        res.json(data);
-    } catch (error) {
-    console.error(`❌ Error al conectar con Holded (${resource}):`, error.message);
-    res.status(500).json({ error: error.message });
-}
-
+// Ruta principal
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Ruta para obtener contactos desde Holded
+app.get('/api/contacts', async (req, res) => {
+  try {
+    const response = await axios.get('https://api.holded.com/api/invoicing/v1/contacts', {
+      headers: {
+        'accept': 'application/json',
+        'key': process.env.HOLDED_API_KEY
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error al obtener contactos:', error.message);
+    res.status(500).json({ error: 'Error al obtener contactos desde Holded' });
+  }
+});
+
+// Manejo de rutas no encontradas
+app.use((req, res) => {
+  res.status(404).send('Ruta no encontrada');
+});
+
+// Puerto
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Proxy dinámico activo en http://localhost:${PORT}`);
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
