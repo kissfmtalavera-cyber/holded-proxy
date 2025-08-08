@@ -20,7 +20,7 @@ app.get('/api/contacts', async (req, res) => {
     const response = await axios.get('https://api.holded.com/api/invoicing/v1/contacts', {
       headers: {
         'accept': 'application/json',
-        'key': process.env.HOLDED_API_KEY
+        'Authorization': `Bearer ${process.env.HOLDED_API_KEY}`
       }
     });
     res.json(response.data);
@@ -28,6 +28,33 @@ app.get('/api/contacts', async (req, res) => {
     console.error('Error al obtener contactos:', error.message);
     res.status(500).json({ error: 'Error al obtener contactos desde Holded' });
   }
+});
+
+// Ruta para obtener documentos (facturas, presupuestos, etc.)
+app.get('/api/documents', async (req, res) => {
+  try {
+    const type = req.query.type; // Ejemplo: ?type=invoice
+    const url = type
+      ? `https://api.holded.com/api/invoicing/v1/documents?type=${type}`
+      : 'https://api.holded.com/api/invoicing/v1/documents';
+
+    const response = await axios.get(url, {
+      headers: {
+        'accept': 'application/json',
+        'Authorization': `Bearer ${process.env.HOLDED_API_KEY}`
+      }
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error al obtener documentos:', error.message);
+    res.status(500).json({ error: 'Error al obtener documentos desde Holded' });
+  }
+});
+
+// Ruta de diagnóstico (health check)
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // Manejo de rutas no encontradas
